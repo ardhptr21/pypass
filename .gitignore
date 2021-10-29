@@ -1,0 +1,4 @@
+/venv
+/**/__pycache__
+/database.db
+/DON'T_DELETE_database.db.txt
