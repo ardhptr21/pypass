@@ -56,8 +56,63 @@ def add(account: Account):
     console.print("\n[green]Successfully add new account info")
 
 
-def update():
-    print("update")
+def update(account: Account):
+    console.print(
+        "[bold yellow]Please search by App Name to [blue]update[/blue] the account info!\n"
+    )
+    search = console.input("[magenta]Keyword:[/magenta] ")
+
+    result = account.find(search)
+    if not result:
+        console.print(
+            f"[red]Ooops! account info with keyword search [white]{search}[/white] is not match to any data"
+        )
+        return
+    else:
+        screenClear()
+        console.print(
+            f'[green]We found account info to updated with keyword search[/green] [white bold]"{search}"\n'
+        )
+        console.print(f"[yellow]Email\t :[/yellow] {result['email']}")
+        console.print(f"[yellow]Username :[/yellow] {result['username']}")
+        console.print(f"[yellow]Password :[/yellow] {result['password']}")
+        console.print(f"[yellow]App Name :[/yellow] {result['app_name']}")
+        console.print(f"[yellow]Url\t :[/yellow] {result['url']}")
+
+    isReady = inputCheck(
+        "[magenta]Ready for update this account info?[/magenta]", sol="\n"
+    )
+    if not isReady:
+        console.print("[green]Updated account info canceled")
+
+    screenClear()
+    console.print("[bold yellow]Please select field to update account info\n")
+
+    fields = {
+        "email": False,
+        "username": False,
+        "password": False,
+        "app_name": False,
+        "url": False,
+    }
+
+    for key in fields.keys():
+        isUpdate = inputCheck(
+            f"[magenta]Update field[/magenta] [white bold italic]{' '.join(key.split('_')).capitalize()}"
+        )
+        if isUpdate:
+            fields[key] = True
+
+    screenClear()
+    console.print("[yellow]Let's get update value for field you choose")
+    updatedValue = dict()
+
+    for field in filter(lambda x: bool(fields[x]), fields.keys()):
+        value = console.input(f"[magenta]{field}\t :[/magenta] ")
+        updatedValue[field] = value
+
+    account.update(updatedValue)
+    console.print("[green]\nAccount info updated")
 
 
 def delete(account: Account):
@@ -86,11 +141,12 @@ def delete(account: Account):
         isSure = inputCheck(
             "[magenta]Are you sure want to delete this?[/magenta]", sol="\n"
         )
-        if isSure:
-            account.delete(result["app_name"])
-            console.print("\n[green]Account info deleted")
-        else:
+        if not isSure:
             console.print("\n[green]Deleted account info canceled")
+            return
+
+        account.delete(result["app_name"])
+        console.print("\n[green]Account info deleted")
 
 
 def choose(menu, account: Account):
