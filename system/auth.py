@@ -22,8 +22,25 @@ def login(user: User):
     screenClear()
 
 
-def search():
-    print("search")
+def search(account: Account):
+    console.print("[bold yellow]Please search by App Name!\n")
+    search = console.input("[magenta]Keyword:[/magenta] ")
+
+    result = account.find(search)
+    if not result:
+        console.print(
+            f"[red]Ooops! account info with keyword search [white]{search}[/white] is not match to any data"
+        )
+    else:
+        screenClear()
+        console.print(
+            f'[green]Result with keyword search[/green] [white bold]"{search}"\n'
+        )
+        console.print(f"[yellow]Email\t :[/yellow] {result['email']}")
+        console.print(f"[yellow]Username :[/yellow] {result['username']}")
+        console.print(f"[yellow]Password :[/yellow] {result['password']}")
+        console.print(f"[yellow]App Name :[/yellow] {result['app_name']}")
+        console.print(f"[yellow]Url\t :[/yellow] {result['url']}")
 
 
 def add(account: Account):
@@ -36,15 +53,44 @@ def add(account: Account):
     url = console.input("[magenta]Url\t :[/magenta] ")
 
     account.add(password, app_name, email, username, url)
-    console.print("[green]Successfully add new account info")
+    console.print("\n[green]Successfully add new account info")
 
 
 def update():
     print("update")
 
 
-def delete():
-    print("delete")
+def delete(account: Account):
+    console.print(
+        "[bold yellow]Please search by App Name to [red]delete[/red] the account info!\n"
+    )
+    search = console.input("[magenta]Keyword:[/magenta] ")
+
+    result = account.find(search)
+
+    if not result:
+        console.print(
+            f"[red]Ooops! can't found any account info to delete with keyword search[/red] [white]{search}[/white]"
+        )
+    else:
+        screenClear()
+        console.print(
+            f'[green]We found account info to deleted with keyword search[/green] [white bold]"{search}"\n'
+        )
+        console.print(f"[yellow]Email\t :[/yellow] {result['email']}")
+        console.print(f"[yellow]Username :[/yellow] {result['username']}")
+        console.print(f"[yellow]Password :[/yellow] {result['password']}")
+        console.print(f"[yellow]App Name :[/yellow] {result['app_name']}")
+        console.print(f"[yellow]Url\t :[/yellow] {result['url']}")
+
+        isSure = inputCheck(
+            "[magenta]Are you sure want to delete this?[/magenta]", sol="\n"
+        )
+        if isSure:
+            account.delete(result["app_name"])
+            console.print("\n[green]Account info deleted")
+        else:
+            console.print("\n[green]Deleted account info canceled")
 
 
 def choose(menu, account: Account):

@@ -20,6 +20,7 @@ class Database(ABC):
                 )
 
         self._conn: sqlite3.Connection = sqlite3.connect(dbpath)
+        self._conn.row_factory = sqlite3.Row
         self._cursor = self._conn.cursor()
 
     def close(self):

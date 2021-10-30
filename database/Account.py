@@ -57,6 +57,13 @@ class Account(Database):
             ).fetchone()
             return account
 
+    def delete(self, app_name):
+        with self._conn:
+            self._conn.execute(
+                f"DELETE FROM {self._table} WHERE app_name=:app_name",
+                {"app_name": app_name},
+            )
+
     def update(self, app_name: str, updateValue: dict):
         with self._conn:
             updateField = ""

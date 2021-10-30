@@ -46,4 +46,6 @@ class User(Database):
         if not user:
             return False
 
-        return bcrypt.checkpw(bytes(password, "utf-8"), bytes(user[2], "utf-8"))
+        return bcrypt.checkpw(
+            bytes(password, "utf-8"), bytes(user["password"], "utf-8")
+        )
